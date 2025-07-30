@@ -93,6 +93,8 @@ const EnvSchema = z.object({
   MCP_LOG_LEVEL: z.string().default("info"),
   /** Directory for log files. Defaults to "logs" in project root. */
   LOGS_DIR: z.string().default(path.join(projectRoot, "logs")),
+  /** Force console logging regardless of TTY status. Default: false. */
+  MCP_FORCE_CONSOLE_LOGGING: z.coerce.boolean().default(false),
   /** Runtime environment (e.g., "development", "production"). Default: "development". */
   NODE_ENV: z.string().default("development"),
   /** MCP communication transport ("stdio" or "http"). Default: "stdio". */
@@ -265,6 +267,8 @@ export const config = {
   logLevel: env.MCP_LOG_LEVEL,
   /** Absolute path to the logs directory. From `LOGS_DIR` env var. */
   logsPath: validatedLogsPath,
+  /** Force console logging regardless of TTY status. From `MCP_FORCE_CONSOLE_LOGGING` env var. Default: false. */
+  forceConsoleLogging: env.MCP_FORCE_CONSOLE_LOGGING,
   /** Runtime environment. From `NODE_ENV` env var. Default: "development". */
   environment: env.NODE_ENV,
   /** MCP transport type ('stdio' or 'http'). From `MCP_TRANSPORT_TYPE` env var. Default: "stdio". */
@@ -321,3 +325,9 @@ export const logLevel: string = config.logLevel;
  * Exported for convenience.
  */
 export const environment: string = config.environment;
+
+/**
+ * Force console logging flag.
+ * Exported for convenience.
+ */
+export const forceConsoleLogging: boolean = config.forceConsoleLogging;

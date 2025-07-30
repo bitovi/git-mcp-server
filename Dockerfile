@@ -50,6 +50,7 @@ USER appuser
 # Set default environment variables
 ENV MCP_TRANSPORT_TYPE=stdio
 ENV MCP_LOG_LEVEL=info
+ENV MCP_FORCE_CONSOLE_LOGGING=true
 
 # Expose port for HTTP transport (if used)
 EXPOSE 3010

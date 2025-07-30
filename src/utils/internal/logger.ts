@@ -210,19 +210,23 @@ class Logger {
     let consoleLoggingEnabledMessage: string | null = null;
     let consoleLoggingSkippedMessage: string | null = null;
 
-    // Conditionally add Console transport only if:
-    // 1. MCP level is 'debug'
-    // 2. stdout is a TTY (interactive terminal, not piped)
-    if (this.currentMcpLevel === "debug" && process.stdout.isTTY) {
+    // Check if console logging is forced via environment variable
+    const forceConsoleLogging = config.forceConsoleLogging;
+
+    // Conditionally add Console transport if:
+    // 1. MCP level is 'debug' AND stdout is a TTY (original behavior)
+    // 2. OR console logging is forced via MCP_FORCE_CONSOLE_LOGGING=true
+    if ((this.currentMcpLevel === "debug" && process.stdout.isTTY) || forceConsoleLogging) {
       const consoleFormat = createWinstonConsoleFormat();
       transports.push(
         new winston.transports.Console({
-          level: "debug",
+          level: forceConsoleLogging ? this.currentWinstonLevel : "debug",
           format: consoleFormat,
         }),
       );
-      consoleLoggingEnabledMessage =
-        "Console logging enabled at level: debug (stdout is TTY)";
+      consoleLoggingEnabledMessage = forceConsoleLogging
+        ? `Console logging enabled (forced via MCP_FORCE_CONSOLE_LOGGING) at level: ${this.currentWinstonLevel}`
+        : "Console logging enabled at level: debug (stdout is TTY)";
     } else if (this.currentMcpLevel === "debug" && !process.stdout.isTTY) {
       consoleLoggingSkippedMessage =
         "Console logging skipped: Level is debug, but stdout is not a TTY (likely stdio transport).";
@@ -248,8 +252,10 @@ class Logger {
 
     this.initialized = true;
     await Promise.resolve(); // Yield to event loop
+    
+    const consoleEnabled = (this.currentMcpLevel === "debug" && process.stdout.isTTY) || config.forceConsoleLogging;
     this.info(
-      `Logger initialized. File logging level: ${this.currentWinstonLevel}. MCP logging level: ${this.currentMcpLevel}. Console logging: ${process.stdout.isTTY && this.currentMcpLevel === "debug" ? "enabled" : "disabled"}`,
+      `Logger initialized. File logging level: ${this.currentWinstonLevel}. MCP logging level: ${this.currentMcpLevel}. Console logging: ${consoleEnabled ? "enabled" : "disabled"}`,
       { loggerSetup: true },
     );
   }
