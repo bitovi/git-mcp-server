@@ -40,6 +40,9 @@ COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/dist ./dist
 # Copy package.json (needed for potential runtime info, like version)
 COPY package.json .
+# Copy the entrypoint script
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Create a non-root user and switch to it
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
@@ -54,6 +57,9 @@ ENV MCP_FORCE_CONSOLE_LOGGING=true
 
 # Expose port for HTTP transport (if used)
 EXPOSE 3010
+
+# Set the entrypoint
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 # Command to run the application
 CMD ["node", "dist/index.js"]

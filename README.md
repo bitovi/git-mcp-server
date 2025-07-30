@@ -1,204 +1,328 @@
 <div align="center">
 
-# @cyanheads/git-mcp-server
+# Bitovi Git MCP Server (Docker Edition)
 
-**Empower your AI agents with comprehensive, secure, and programmatic control over Git repositories!**
+**Run the @cyanheads/git-mcp-server in Docker with HTTP transport and enhanced logging!**
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-^5.8.3-blue?style=flat-square)](https://www.typescriptlang.org/)
 [![Model Context Protocol SDK](https://img.shields.io/badge/MCP%20SDK-^1.17.0-green?style=flat-square)](https://github.com/modelcontextprotocol/typescript-sdk)
-[![MCP Spec Version](https://img.shields.io/badge/MCP%20Spec-2025--06--18-lightgrey?style=flat-square)](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-06-18/changelog.mdx)
-[![Version](https://img.shields.io/badge/Version-2.2.4-blue?style=flat-square)](./CHANGELOG.md)
-[![Coverage](https://img.shields.io/badge/Coverage-0.0%25-red?style=flat-square)](./vitest.config.ts)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue?style=flat-square)](https://opensource.org/licenses/Apache-2.0)
-[![Status](https://img.shields.io/badge/Status-Stable-green?style=flat-square)](https://github.com/cyanheads/git-mcp-server/issues)
-[![GitHub](https://img.shields.io/github/stars/cyanheads/git-mcp-server?style=social)](https://github.com/cyanheads/git-mcp-server)
+[![Docker](https://img.shields.io/badge/Docker-Ready-blue?style=flat-square)](https://www.docker.com/)
+[![Original Repository](https://img.shields.io/badge/Original-@cyanheads/git--mcp--server-green?style=flat-square)](https://github.com/cyanheads/git-mcp-server)
 
 </div>
 
-An MCP (Model Context Protocol) server providing a robust, LLM-friendly interface to the standard `git` command-line tool. Enables LLMs and AI agents to perform a wide range of Git operations like clone, commit, push, pull, branch, diff, log, status, and more via the MCP standard.
+> **Note**: This is a Docker-optimized version of the excellent [@cyanheads/git-mcp-server](https://github.com/cyanheads/git-mcp-server). For complete documentation, features, and usage details, please refer to the [original README](https://github.com/cyanheads/git-mcp-server/blob/main/README.md).
 
-Built on the [`cyanheads/mcp-ts-template`](https://github.com/cyanheads/mcp-ts-template), this server follows a modular architecture with robust error handling, logging, and security features.
+This Docker edition provides an easy way to run the Git MCP Server in a containerized environment with HTTP transport and enhanced console logging for Docker Desktop.
 
-## 🤔 Why Use This Server?
-
-- **Automate Git Workflows**: Enable AI agents to programmatically clone, commit, push, and manage branches.
-- **Gain Repository Insights**: Allow tools to check status, view logs, and diff changes without direct shell access.
-- **Integrate Git into AI-driven Development**: Let LLMs manage version control as part of their coding tasks.
-- **Production-Ready Foundation**: Inherits logging, error handling, and security from the template.
-
-## 🚀 Core Capabilities: Git Tools 🛠️
-
-This server equips your AI with a comprehensive suite of tools to interact with Git repositories:
-
-| Tool Category            | Description                                                       | Key Features -                                                                                                                                                                                                                                                                                                                                         |
-| :----------------------- | :---------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Repository & Staging** | Manage repository state, from initialization to staging changes.  | - `git_init`: Initialize a new repository.<br/>- `git_clone`: Clone remote repositories.<br/>- `git_add`: Stage changes for commit.<br/>- `git_status`: Check the status of the working directory.<br/>- `git_clean`: Remove untracked files (requires force flag). -                                                                                  |
-| **Committing & History** | Create commits, inspect history, and view changes over time.      | - `git_commit`: Create new commits with conventional messages.<br/>- `git_log`: View commit history with filtering options.<br/>- `git_diff`: Show changes between commits, branches, or the working tree.<br/>- `git_show`: Inspect Git objects like commits and tags. -                                                                              |
-| **Branching & Merging**  | Manage branches, merge changes, and rebase commits.               | - `git_branch`: List, create, delete, and rename branches.<br/>- `git_checkout`: Switch between branches or commits.<br/>- `git_merge`: Merge branches together.<br/>- `git_rebase`: Re-apply commits on top of another base.<br/>- `git_cherry_pick`: Apply specific commits from other branches. -                                                   |
-| **Remote Operations**    | Interact with remote repositories.                                | - `git_remote`: Manage remote repository connections.<br/>- `git_fetch`: Download objects and refs from a remote.<br/>- `git_pull`: Fetch and integrate with another repository.<br/>- `git_push`: Update remote refs with local changes. -                                                                                                            |
-| **Advanced Workflows**   | Support for more complex Git workflows and repository management. | - `git_tag`: Create, list, or delete tags.<br/>- `git_stash`: Temporarily store modified files.<br/>- `git_worktree`: Manage multiple working trees attached to a single repository.<br/>- `git_set_working_dir`: Set a persistent working directory for a session.<br/>- `git_wrapup_instructions`: Get a standard workflow for finalizing changes. - |
-
----
-
-## Table of Contents
-
-| [Overview](#overview) | [Features](#features) | [Installation](#installation) |
-| [Configuration](#configuration) | [Project Structure](#project-structure) |
-| [Tools](#tools) | [Resources](#resources) | [Development](#development) | [License](#license) |
-
-## Overview
-
-The Git MCP Server acts as a bridge, allowing applications (MCP Clients) that understand the Model Context Protocol (MCP) – like advanced AI coding assistants (LLMs), IDE extensions, or custom research tools – to interact directly and safely with local Git repositories.
-
-Instead of complex scripting or manual command-line interaction, your tools can leverage this server to:
-
-- **Automate Git workflows**: Clone repositories, create branches, stage changes, commit work, push updates, and manage tags programmatically.
-- **Gain repository insights**: Check status, view logs, diff changes, and inspect Git objects without leaving the host application.
-- **Integrate Git into AI-driven development**: Enable LLMs to manage version control as part of their coding or refactoring tasks, ensuring code integrity and history.
-- **Support CI/CD and DevOps automation**: Build custom scripts and tools that orchestrate complex Git operations for automated builds, testing, and deployments.
-
-Built on the robust `mcp-ts-template`, this server provides a standardized, secure, and efficient way to expose Git functionality via the MCP standard. It achieves this by securely executing the standard `git` command-line tool installed on the system using Node.js's `child_process` module, ensuring compatibility and leveraging the full power of Git.
-
-> **Developer Note**: This repository includes a [.clinerules](.clinerules) file that serves as a developer cheat sheet for your LLM coding agent with quick reference for the codebase patterns, file locations, and code snippets.
-
-## Features
-
-### Core Utilities
-
-Leverages the robust utilities provided by the `mcp-ts-template`:
-
-- **Logging**: Structured, configurable logging (file rotation, stdout JSON, MCP notifications) with sensitive data redaction.
-- **Error Handling**: Centralized error processing, standardized error types (`McpError`), and automatic logging.
-- **Configuration**: Environment variable loading (`dotenv`) with comprehensive validation.
-- **Input Validation/Sanitization**: Uses `zod` for schema validation and custom sanitization logic (crucial for paths).
-- **Request Context**: Tracking and correlation of operations via unique request IDs using `AsyncLocalStorage`.
-- **Type Safety**: Strong typing enforced by TypeScript and Zod schemas.
-- **HTTP Transport**: High-performance HTTP server using **Hono**, featuring session management, CORS, and authentication support.
-- **Deployment**: Multi-stage `Dockerfile` for creating small, secure production images with native dependency support.
-
-### Git Integration
-
-- **Direct Git CLI Execution**: Interacts with Git by securely executing the standard `git` command-line tool via Node.js `child_process`, ensuring full compatibility and access to Git's features.
-- **Comprehensive Command Coverage**: Exposes a wide range of Git commands as MCP tools (see [Tools](#tools) section).
-- **Repository Interaction**: Supports status checking, branching, staging, committing, fetching, pulling, pushing, diffing, logging, resetting, tagging, and more.
-- **Working Directory Management**: Allows setting and clearing a session-specific working directory for context persistence across multiple Git operations.
-- **Safety Features**: Includes checks and requires explicit confirmation for potentially destructive operations like `git clean` and `git reset --hard`.
-- **Commit Signing**: Supports GPG or SSH signing for verified commits, controlled via the `GIT_SIGN_COMMITS` environment variable and server-side Git configuration. Includes an optional tool parameter to fall back to unsigned commits on signing failure.
-
-## Installation
+## 🐳 Quick Start with Docker
 
 ### Prerequisites
 
-- [Node.js (>=20.0.0)](https://nodejs.org/)
-- [npm](https://www.npmjs.com/) (comes with Node.js)
-- [Git](https://git-scm.com/) installed and accessible in the system PATH.
+- [Docker](https://www.docker.com/) installed and running
+- Optional: [ngrok](https://ngrok.com/) for HTTPS tunneling
 
-### MCP Client Settings
+### Running the Container
 
-Add the following to your MCP client's configuration file (e.g., `cline_mcp_settings.json`). This configuration uses `npx` to run the server, which will automatically install the package if not already present:
+1. **Build the Docker image:**
+   ```bash
+   docker build -t bitovi/git-mcp-server .
+   ```
 
-```json
-{
-  "mcpServers": {
-    "git-mcp-server": {
-      "command": "npx",
-      "args": ["@cyanheads/git-mcp-server"],
-      "env": {
-        "MCP_LOG_LEVEL": "info",
-        "GIT_SIGN_COMMITS": "false"
-      }
-    }
-  }
-}
-```
+2. **Run in HTTP mode with console logging:**
+   ```bash
+   docker run -d --name git-mcp-server \
+     -p 3010:3010 \
+     -v /path/to/your/repos:/workspace \
+     -e MCP_TRANSPORT_TYPE=http \
+     -e MCP_HTTP_HOST=0.0.0.0 \
+     -e MCP_HTTP_PORT=3010 \
+     -e MCP_LOG_LEVEL=debug \
+     -e MCP_FORCE_CONSOLE_LOGGING=true \
+     bitovi/git-mcp-server
+   ```
 
-### If running manually (not via MCP client) for development or testing
+   **Using .env file (Recommended for multiple variables):**
+   
+   Copy the example environment file and customize it:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your actual values
+   ```
 
-#### Install via npm
+   Example `.env` file contents:
+   ```bash
+   # .env file
+   MCP_TRANSPORT_TYPE=http
+   MCP_HTTP_HOST=0.0.0.0
+   MCP_HTTP_PORT=3010
+   MCP_LOG_LEVEL=debug
+   MCP_FORCE_CONSOLE_LOGGING=true
+   GIT_TOKEN=ghp_your_personal_access_token_here
+   GIT_USERNAME=your_github_username
+   ```
+
+   Then run Docker with the `--env-file` flag:
+   ```bash
+   docker run -d --name git-mcp-server \
+     -p 3010:3010 \
+     -v /path/to/your/repos:/workspace \
+     --env-file .env \
+     bitovi/git-mcp-server
+   ```
+
+   **Volume Options:**
+   - **Local directory**: `-v /Users/yourname/git-repos:/workspace` (macOS/Linux)
+   - **Windows**: `-v C:\git-repos:/workspace` 
+   - **Docker volume**: `-v git-repos-volume:/workspace`
+
+   **Volume Syntax Explained:**
+   The `-v` flag uses the format `HOST_PATH:CONTAINER_PATH`:
+   - **Left side** (`/path/to/your/repos`): Directory on your host machine
+   - **Colon** (`:`): Separator between host and container paths  
+   - **Right side** (`/workspace`): Directory inside the Docker container
+   
+   Example: `-v /Users/john/my-repos:/workspace` means:
+   - Host directory: `/Users/john/my-repos` (on your computer)
+   - Container directory: `/workspace` (inside Docker)
+   - Files in both locations are synchronized
+
+3. **Set the working directory via MCP:**
+   - Use the `git_set_working_dir` tool to set `/workspace` as your base directory
+   - All Git operations will then be relative to `/workspace`
+   - Your cloned repositories will persist in the mounted volume
+
+4. **Access the server:**
+   - Local: `http://localhost:3010/mcp`
+   - With ngrok: `ngrok http 3010` then use the HTTPS URL
+
+5. **View logs in Docker Desktop:**
+   - Open Docker Desktop
+   - Navigate to Containers
+   - Click on `git-mcp-server`
+   - View the "Logs" tab for real-time HTTP request logging
+
+### Working with Git Repositories
+
+When you mount a volume, all Git operations can be performed within that persistent space:
 
 ```bash
+# Example workflow using the MCP API:
+# 1. Set working directory to the mounted volume
+POST /mcp - git_set_working_dir tool with path="/workspace"
+
+# 2. Clone a repository
+POST /mcp - git_clone tool with url="https://github.com/user/repo.git"
+
+# 3. The repo will be cloned to /workspace/repo (persisted on your host)
+```
+
+**Benefits of using volumes:**
+- **Persistence**: Repositories survive container restarts
+- **Host access**: Edit files directly on your host system
+- **Performance**: Better I/O performance than container filesystem
+- **Backup**: Easy to backup by copying the host directory
+
+### Git Authentication
+
+By default, the Docker container does **not** have access to your host's Git credentials. For private repositories or push operations, you'll need to provide authentication:
+
+#### Option 1: Personal Access Token (Recommended for HTTPS)
+
+Create a [GitHub Personal Access Token](https://github.com/settings/tokens) and configure Git credentials:
+
+**Method A: Using GIT_TOKEN environment variable (Easiest)**
+```bash
+docker run -d --name git-mcp-server \
+  -p 3010:3010 \
+  -v /path/to/your/repos:/workspace \
+  -e MCP_TRANSPORT_TYPE=http \
+  -e MCP_HTTP_HOST=0.0.0.0 \
+  -e MCP_HTTP_PORT=3010 \
+  -e MCP_LOG_LEVEL=debug \
+  -e MCP_FORCE_CONSOLE_LOGGING=true \
+  -e GIT_TOKEN=ghp_your_token_here \
+  -e GIT_USERNAME=your_github_username \
+  bitovi/git-mcp-server
+```
+
+**Method A (Alternative): Using .env file**
+Create a `.env` file with your credentials:
+```bash
+# .env file
+MCP_TRANSPORT_TYPE=http
+MCP_HTTP_HOST=0.0.0.0
+MCP_HTTP_PORT=3010
+MCP_LOG_LEVEL=debug
+MCP_FORCE_CONSOLE_LOGGING=true
+GIT_TOKEN=ghp_your_personal_access_token_here
+GIT_USERNAME=your_github_username
+```
+
+Then run with `--env-file`:
+```bash
+docker run -d --name git-mcp-server \
+  -p 3010:3010 \
+  -v /path/to/your/repos:/workspace \
+  --env-file .env \
+  bitovi/git-mcp-server
+```
+
+The container will automatically create a `.git-credentials` file and configure Git to use your token.
+
+**Method B: Using Git credential store (Manual)**
+```bash
+# First, create a credential file on your host
+echo "https://your_username:ghp_your_token_here@github.com" > ~/.git-credentials
+
+# Then mount it into the container
+docker run -d --name git-mcp-server \
+  -p 3010:3010 \
+  -v /path/to/your/repos:/workspace \
+  -v ~/.git-credentials:/home/appuser/.git-credentials:ro \
+  -e MCP_TRANSPORT_TYPE=http \
+  -e MCP_HTTP_HOST=0.0.0.0 \
+  -e MCP_HTTP_PORT=3010 \
+  -e MCP_LOG_LEVEL=debug \
+  -e MCP_FORCE_CONSOLE_LOGGING=true \
+  bitovi/git-mcp-server
+```
+
+**Method C: Using repository URLs with embedded tokens**
+For one-time operations, include the token directly in the repository URL:
+```
+https://your_username:ghp_your_token_here@github.com/user/repo.git
+```
+
+#### Option 2: SSH Keys (For SSH-based repositories)
+
+Mount your SSH keys into the container:
+
+```bash
+docker run -d --name git-mcp-server \
+  -p 3010:3010 \
+  -v /path/to/your/repos:/workspace \
+  -v ~/.ssh:/home/appuser/.ssh:ro \
+  -e MCP_TRANSPORT_TYPE=http \
+  -e MCP_HTTP_HOST=0.0.0.0 \
+  -e MCP_HTTP_PORT=3010 \
+  -e MCP_LOG_LEVEL=debug \
+  -e MCP_FORCE_CONSOLE_LOGGING=true \
+  bitovi/git-mcp-server
+```
+
+#### Option 3: Git Config + Credentials
+
+Mount your Git configuration and credential files:
+
+```bash
+docker run -d --name git-mcp-server \
+  -p 3010:3010 \
+  -v /path/to/your/repos:/workspace \
+  -v ~/.gitconfig:/home/appuser/.gitconfig:ro \
+  -v ~/.git-credentials:/home/appuser/.git-credentials:ro \
+  -e MCP_TRANSPORT_TYPE=http \
+  -e MCP_HTTP_HOST=0.0.0.0 \
+  -e MCP_HTTP_PORT=3010 \
+  -e MCP_LOG_LEVEL=debug \
+  -e MCP_FORCE_CONSOLE_LOGGING=true \
+  bitovi/git-mcp-server
+```
+
+**Security Notes:**
+- Personal Access Tokens are recommended for HTTPS repositories
+- Mount credential files as read-only (`:ro`) when possible
+- Never include credentials directly in the Docker image
+- Consider using Docker secrets for production deployments
+- **Important**: Add `.env` to your `.gitignore` file to avoid committing secrets to version control
+- For production, consider using Docker secrets or external secret management systems
+
+**Authentication Troubleshooting:**
+- If authentication fails, verify your token has the necessary permissions (repo, read:org, etc.)
+- For private repositories, ensure the token or SSH key has access to the specific repository
+- Test authentication outside the container first: `git clone https://username:token@github.com/user/repo.git`
+
+### Environment Variables
+
+| Variable                    | Description                                           | Default     |
+| --------------------------- | ----------------------------------------------------- | ----------- |
+| `MCP_TRANSPORT_TYPE`        | Set to `http` for Docker deployment                  | `stdio`     |
+| `MCP_HTTP_HOST`             | Host address (use `0.0.0.0` for Docker)             | `127.0.0.1` |
+| `MCP_HTTP_PORT`             | Port for the HTTP server                             | `3010`      |
+| `MCP_LOG_LEVEL`             | Logging level (`debug`, `info`, `warn`, `error`)     | `info`      |
+| `MCP_FORCE_CONSOLE_LOGGING` | Force logs to stdout/stderr for Docker visibility    | `false`     |
+| `GIT_TOKEN`                 | GitHub Personal Access Token for authentication      | `none`      |
+| `GIT_USERNAME`              | GitHub username (defaults to "token" if not set)     | `token`     |
+
+### Example HTTP Request
+
+```bash
+curl -X POST http://localhost:3010/mcp \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "initialize",
+    "params": {
+      "protocolVersion": "2024-11-05",
+      "capabilities": {},
+      "clientInfo": {"name": "test-client", "version": "1.0.0"}
+    },
+    "id": 1
+  }'
+```
+
+---
+
+## 📖 Original Documentation
+
+For complete feature documentation, API reference, and detailed usage instructions, please visit the original repository:
+
+**👉 [Complete Documentation - @cyanheads/git-mcp-server](https://github.com/cyanheads/git-mcp-server/blob/main/README.md)**
+
+The original README includes:
+- Complete list of available Git tools and commands
+- Detailed configuration options
+- Development setup instructions
+- API documentation and examples
+- Contributing guidelines
+
+## � Docker Configuration Details
+
+### Container Features
+
+This Docker edition includes several enhancements for containerized deployment:
+
+- **HTTP Transport**: Configured for HTTP-based MCP communication instead of stdio
+- **Enhanced Logging**: Console logging forced to stdout/stderr for Docker Desktop visibility
+- **Port Binding**: Exposed on port 3010 for external access
+- **Multi-stage Build**: Optimized Docker image with minimal footprint
+- **Security**: Runs as non-root user with proper permissions
+
+### Troubleshooting
+
+- **Container not accessible**: Ensure `MCP_HTTP_HOST=0.0.0.0` (not `127.0.0.1`)
+- **No logs in Docker Desktop**: Verify `MCP_FORCE_CONSOLE_LOGGING=true` is set
+- **Port conflicts**: Change the external port mapping (`-p 3011:3010`)
+- **HTTPS required**: Use ngrok or configure reverse proxy with SSL
+- **Volume permissions**: Ensure the host directory has proper read/write permissions
+- **Git operations fail**: Use `git_set_working_dir` to set `/workspace` before Git operations
+- **Files not persisting**: Verify the volume mount path matches the working directory set via MCP
+
+### Development
+
+For local development with the original stdio transport:
+
+```bash
+npm install
 npm run build
-# Or use 'npm run rebuild' for a clean install
+npm run start:server
 ```
 
-### 3. Running the Server
-
-- **Via Stdio (Default):**
-  ```bash
-  npm run start:server
-  ```
-- **Via Streamable HTTP:**
-  ```bash
-  npm run start:server:http
-  ```
-
-### 4. Running Tests
-
-This server uses [Vitest](https://vitest.dev/) for testing.
-
-- **Run all tests once:**
-  ```bash
-  npm test
-  ```
-- **Run tests in watch mode:**
-  ```bash
-  npm run test:watch
-  ```
-- **Run tests and generate a coverage report:**
-  ```bash
-  npm run test:coverage
-  ```
-
-## ⚙️ Configuration
-
-Configure the server using these environment variables (or a `.env` file):
-
-| Variable              | Description                                                                                                                           | Default     |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `MCP_TRANSPORT_TYPE`  | Transport mechanism: `stdio` or `http`.                                                                                               | `stdio`     |
-| `MCP_HTTP_PORT`       | Port for the HTTP server (if `MCP_TRANSPORT_TYPE=http`). Retries next ports if busy.                                                  | `3010`      |
-| `MCP_HTTP_HOST`       | Host address for the HTTP server (if `MCP_TRANSPORT_TYPE=http`).                                                                      | `127.0.0.1` |
-| `MCP_ALLOWED_ORIGINS` | Comma-separated list of allowed origins for CORS (if `MCP_TRANSPORT_TYPE=http`).                                                      | (none)      |
-| `MCP_LOG_LEVEL`       | Logging level (`debug`, `info`, `notice`, `warning`, `error`, `crit`, `alert`, `emerg`). Inherited from template.                     | `info`      |
-| `GIT_SIGN_COMMITS`    | Set to `"true"` to enable signing attempts for commits made by the `git_commit` tool. Requires server-side Git/key setup (see below). | `false`     |
-| `MCP_AUTH_MODE`       | Authentication mode: `jwt`, `oauth`, or `none`.                                                                                       | `none`      |
-| `MCP_AUTH_SECRET_KEY` | Secret key for JWT validation (if `MCP_AUTH_MODE=jwt`).                                                                               | `''`        |
-| `OAUTH_ISSUER_URL`    | OIDC issuer URL for OAuth validation (if `MCP_AUTH_MODE=oauth`).                                                                      | `''`        |
-| `OAUTH_AUDIENCE`      | Audience claim for OAuth validation (if `MCP_AUTH_MODE=oauth`).                                                                       | `''`        |
-
-## 🏗️ Project Structure
-
-- **`src/mcp-server/`**: Contains the core MCP server, tools, resources, and transport handlers.
-- **`src/config/`**: Handles loading and validation of environment variables.
-- **`src/types-global/`**: Defines shared TypeScript interfaces and type definitions.
-- **`src/utils/`**: Core utilities (logging, error handling, security, etc.).
-- **`src/index.ts`**: The main entry point that initializes and starts the server.
-
-**Explore the full structure yourself:**
-
-See the current file tree in [docs/tree.md](docs/tree.md) or generate it dynamically:
-
-```bash
-npm run tree
-```
-
-## 📦 Resources
-
-In addition to tools, the server provides resources that offer contextual information about the Git environment.
-
-| Resource URI              | Description                                                                                                |
-| :------------------------ | :--------------------------------------------------------------------------------------------------------- |
-| `git://working-directory` | Returns the currently configured working directory for the session as a JSON object. Shows `NOT_SET` if unset. |
-
-## 🧩 Extending the System
-
-The canonical pattern for adding new tools is defined in the [.clinerules](.clinerules) file. It mandates a strict separation of concerns:
-
-1.  **`logic.ts`**: Contains the pure business logic, Zod schemas, and type definitions. This file throws structured errors on failure.
-2.  **`registration.ts`**: Acts as the "handler." It registers the tool with the server, wraps the logic call in a `try...catch` block, and formats the final success or error response.
-
-This "Logic Throws, Handler Catches" pattern ensures that core logic remains pure and testable, while the registration layer handles all side effects and response formatting.
+Refer to the [original repository](https://github.com/cyanheads/git-mcp-server) for complete development setup instructions.
 
 ## 📜 License
 
 This project is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for details.
+
+Based on the original work by [@cyanheads/git-mcp-server](https://github.com/cyanheads/git-mcp-server).
