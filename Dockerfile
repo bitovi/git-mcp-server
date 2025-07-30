@@ -4,6 +4,9 @@ FROM node:23-alpine AS base
 WORKDIR /usr/src/app
 ENV NODE_ENV=production
 
+# Install git and other essential tools
+RUN apk add --no-cache git
+
 # ---- Dependencies ----
 # Install dependencies first to leverage Docker cache
 FROM base AS deps
@@ -24,6 +27,8 @@ RUN npm ci
 COPY . .
 # Build the TypeScript project
 RUN npm run build
+# Make the built file executable
+RUN chmod +x dist/index.js
 
 # ---- Runner ----
 # Final stage with only production dependencies and built code
@@ -38,10 +43,16 @@ COPY package.json .
 
 # Create a non-root user and switch to it
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+# Change ownership of the app directory to the non-root user
+RUN chown -R appuser:appgroup /usr/src/app
 USER appuser
 
-# Expose port if the application runs a server (adjust if needed)
-# EXPOSE 3000
+# Set default environment variables
+ENV MCP_TRANSPORT_TYPE=stdio
+ENV MCP_LOG_LEVEL=info
+
+# Expose port for HTTP transport (if used)
+EXPOSE 3010
 
 # Command to run the application
 CMD ["node", "dist/index.js"]
